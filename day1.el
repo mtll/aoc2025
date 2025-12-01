@@ -1,8 +1,8 @@
 ;;; -*- lexical-binding: t -*-
 
 (save-window-excursion
-  (find-file "aoc1")
-  (execute-kbd-macro (kbd "M-< M-% r RET RET ! M-< M-% l RET - RET !"))
+  (find-file-literally "aoc1")
+  (execute-kbd-macro (kbd "rmer RET RET a rmel RET - RET a"))
   (cl-loop for dial = 50 then (mod newdial 100)
            for i in (string-split (buffer-substring (point-min) (point-max)))
            for newdial = (+ dial (string-to-number i))
