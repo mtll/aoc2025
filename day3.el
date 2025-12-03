@@ -9,11 +9,9 @@
                          sum (- d ?0)))))
   (with-work-buffer
     (insert-file-contents-literally "aoc3")
-    (let ((part1 0)
-          (part2 0))
-      (while (not (eobp))
-        (let ((line (buffer-substring-no-properties (point) (pos-eol))))
-          (cl-incf part1 (line-max line 2))
-          (cl-incf part2 (line-max line 12)))
-        (forward-line))
-      (list part1 part2))))
+    (cl-loop until (eobp)
+             for line = (buffer-substring-no-properties (point) (pos-eol))
+             sum (line-max line 2) into part1
+             sum (line-max line 12) into part2
+             do (forward-line)
+             finally return (list part1 part2))))
