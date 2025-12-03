@@ -1,14 +1,19 @@
 ;;; -*- lexical-binding: t -*-
 
-(save-window-excursion
-  (find-file-literally "aoc1")
-  (execute-kbd-macro (kbd "rmer RET RET a rmel RET - RET a"))
-  (cl-loop for dial = 50 then (mod newdial 100)
-           for i in (string-split (buffer-substring (point-min) (point-max)))
-           for newdial = (+ dial (string-to-number i))
-           sum (floor (abs newdial) 100) into part2
-           count (and (/= 0 dial) (<= newdial 0)) into part2
-           count (= 0 dial) into part1
-           finally return (progn (revert-buffer nil t)
-                                 (list part1 part2))))
+(defun solve ()
+  (with-work-buffer
+    (insert-file-contents-literally "aoc1")
+    (let ((dial 50)
+          (pt1 0)
+          (pt2 0))
+      (while (not (eobp))
+        (let* ((next (string-to-number (buffer-substring (1+ (point)) (pos-eol))))
+               (next (+ dial (if (eql (char-after) ?L) (- next) next))))
+          (incf pt2 (floor (abs next) 100))
+          (when (and (/= 0 dial) (<= next 0)) (incf pt2))
+          (when (= 0 (setq dial (mod next 100))) (incf pt1)))
+        (forward-line))
+      (list pt1 pt2))))
+
+
 
